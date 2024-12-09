@@ -6,7 +6,7 @@ use crate::day02::{day2_1, day2_2};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let day: u32 = (&args[1]).parse().unwrap();
+    let day: u8 = (&args[1]).parse().unwrap();
 
     println!("BEGIN DAY {:02}", day);
 

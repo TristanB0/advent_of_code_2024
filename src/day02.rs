@@ -3,13 +3,8 @@ pub fn day2_1() {
 
     let mut res = 0;
     for report in reports {
-        let safe1 =
-            report.is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
-        let safe2 =
-            report.is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
-
-        if safe1 || safe2 {
-            res += 1
+        if is_safe(&report) {
+            res += 1;
         }
     }
 
@@ -21,40 +16,18 @@ pub fn day2_2() {
 
     let mut res = 0;
     for report in reports {
-        let safe1 =
-            report.is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
-        if safe1 {
+        if is_safe(&report) {
             res += 1;
             continue;
         }
 
-        let safe2 =
-            report.is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
-        if safe2 {
-            res += 1;
-            continue;
-        }
-
-        let mut safe3 = false;
         for i in 0..report.len() {
             let mut report_bis = report.clone();
             _ = report_bis.remove(i);
-            let safe1_bis = report_bis
-                .is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
-            if safe1_bis {
-                safe3 = !safe3;
+            if is_safe(&report_bis) {
+                res += 1;
                 break;
             }
-
-            let safe2_bis = report_bis
-                .is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
-            if safe2_bis {
-                safe3 = !safe3;
-                break;
-            }
-        }
-        if safe3 {
-            res += 1;
         }
     }
 
@@ -65,7 +38,7 @@ fn read_file() -> Vec<Vec<u32>> {
     let mut output_vec = vec![];
 
     let file =
-        std::fs::File::open("inputs/day2.txt")
+        std::fs::File::open("inputs/day02.txt")
             .expect("File not found.");
     let reader = std::io::BufReader::new(file);
 
@@ -77,4 +50,20 @@ fn read_file() -> Vec<Vec<u32>> {
     }
 
     output_vec
+}
+
+fn is_safe(report: &Vec<u32>) -> bool {
+    let safe1 =
+        report.is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+    if safe1 {
+        return true;
+    }
+
+    let safe2 =
+        report.is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+    if safe2 {
+        return true;
+    }
+
+    false
 }
