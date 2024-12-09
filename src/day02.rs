@@ -65,7 +65,7 @@ fn read_file() -> Vec<Vec<u32>> {
     let mut output_vec = vec![];
 
     let file =
-        std::fs::File::open("/home/tristan/Documents/Projects/advent_of_code/inputs/day2.txt")
+        std::fs::File::open("inputs/day2.txt")
             .expect("File not found.");
     let reader = std::io::BufReader::new(file);
 

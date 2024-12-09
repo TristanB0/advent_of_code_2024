@@ -18,7 +18,7 @@ fn read_from_file() -> (Vec<u32>, Vec<u32>) {
     let mut b = Vec::new();
 
     let file =
-        std::fs::File::open("/home/tristan/Documents/Projects/advent_of_code/inputs/day1.txt")
+        std::fs::File::open("inputs/day1.txt")
             .unwrap();
     let reader = std::io::BufReader::new(file);
 
