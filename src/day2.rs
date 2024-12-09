@@ -3,12 +3,10 @@ pub fn day2_1() {
 
     let mut res = 0;
     for report in reports {
-        let safe1 = report.is_sorted_by(|a, b| {
-            (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0)
-        });
-        let safe2 = report.is_sorted_by(|a, b| {
-            (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0)
-        });
+        let safe1 =
+            report.is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+        let safe2 =
+            report.is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
 
         if safe1 || safe2 {
             res += 1
@@ -19,7 +17,48 @@ pub fn day2_1() {
 }
 
 pub fn day2_2() {
-    todo!("Need day2_1 first");
+    let reports = read_file();
+
+    let mut res = 0;
+    for report in reports {
+        let safe1 =
+            report.is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+        if safe1 {
+            res += 1;
+            continue;
+        }
+
+        let safe2 =
+            report.is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+        if safe2 {
+            res += 1;
+            continue;
+        }
+
+        let mut safe3 = false;
+        for i in 0..report.len() {
+            let mut report_bis = report.clone();
+            _ = report_bis.remove(i);
+            let safe1_bis = report_bis
+                .is_sorted_by(|a, b| (a < b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+            if safe1_bis {
+                safe3 = !safe3;
+                break;
+            }
+
+            let safe2_bis = report_bis
+                .is_sorted_by(|a, b| (a > b) && (a.abs_diff(*b) <= 3) && (a.abs_diff(*b) > 0));
+            if safe2_bis {
+                safe3 = !safe3;
+                break;
+            }
+        }
+        if safe3 {
+            res += 1;
+        }
+    }
+
+    println!("Day 2-2: {}", res);
 }
 
 fn read_file() -> Vec<Vec<u32>> {

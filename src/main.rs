@@ -12,6 +12,6 @@ fn main() {
 
     println!("BEGIN Day 2");
     day2_1();
-    // day2_2();
+    day2_2();
     println!("END Day 2");
 }
