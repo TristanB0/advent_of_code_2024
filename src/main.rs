@@ -14,17 +14,17 @@ fn main() {
 
     match day {
         1 => {
-            day1_1();
-            day1_2();
-        },
+            println!("Day 1-1: {}", day1_1());
+            println!("Day 1-2: {}", day1_2());
+        }
         2 => {
-            day2_1();
-            day2_2();
-        },
+            println!("Day 2-1: {}", day2_1());
+            println!("Day 2-2: {}", day2_2());
+        }
         3 => {
-            day3_1();
-            day3_2();
-        },
+            println!("Day 3-1: {}", day3_1());
+            println!("Day 3-2: {}", day3_2());
+        }
         _ => {
             println!("Invalid day.");
         }

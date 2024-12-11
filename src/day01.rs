@@ -1,25 +1,23 @@
-pub fn day1_1() {
-    let (mut a, mut b) = read_from_file();
+pub fn day1_1() -> u32 {
+    let (mut a, mut b) = read_from_file("inputs/day01.txt");
 
     a.sort();
     b.sort();
 
-    println!("Day 1-1: {}", distance(a, b));
+    distance(a, b)
 }
 
-pub fn day1_2() {
-    let (a, b) = read_from_file();
+pub fn day1_2() -> u32 {
+    let (a, b) = read_from_file("inputs/day01.txt");
 
-    println!("Day 1-2: {}", similarity(a, b));
+    similarity(a, b)
 }
 
-fn read_from_file() -> (Vec<u32>, Vec<u32>) {
+fn read_from_file(src: &str) -> (Vec<u32>, Vec<u32>) {
     let mut a = Vec::new();
     let mut b = Vec::new();
 
-    let file =
-        std::fs::File::open("inputs/day01.txt")
-            .unwrap();
+    let file = std::fs::File::open(src).expect("File not found.");
     let reader = std::io::BufReader::new(file);
 
     for line in std::io::BufRead::lines(reader) {
@@ -66,4 +64,23 @@ fn count_value(v: Vec<u32>, n: u32) -> u32 {
         }
     }
     sum
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_day1_1() {
+        let (mut a, mut b) = read_from_file("tests/day01.txt");
+        a.sort();
+        b.sort();
+        assert_eq!(distance(a, b), 11);
+    }
+
+    #[test]
+    fn test_day1_2() {
+        let (a, b) = read_from_file("tests/day01.txt");
+        assert_eq!(similarity(a, b), 31);
+    }
 }
