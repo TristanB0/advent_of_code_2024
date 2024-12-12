@@ -1,7 +1,6 @@
 use core::str;
-use std::io::Read;
-
 use regex::Regex;
+use std::io::Read;
 
 pub fn day3_1() -> u32 {
     let text = read_file("inputs/day03.txt");
