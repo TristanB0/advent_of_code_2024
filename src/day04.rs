@@ -7,8 +7,9 @@ pub fn day4_1() -> u32 {
 }
 
 pub fn day4_2() -> u32 {
-    println!("Day 4-2: {}", "TODO");
-    return 0;
+    let text_array = read_file_to_array("inputs/day04.txt");
+
+    analylze_array_2(text_array)
 }
 
 fn read_file_to_array(src: &str) -> Vec<Vec<char>> {
@@ -26,6 +27,7 @@ fn read_file_to_array(src: &str) -> Vec<Vec<char>> {
     output_array
 }
 
+/// Find how many times "XMAS" appear in the text.
 fn analyze_array(text_array: Vec<Vec<char>>) -> u32 {
     let horizontal_count = analyze_horizontal(text_array.clone());
     let vertical_count = analyze_vertical(text_array.clone());
@@ -143,6 +145,59 @@ fn analyze_diagonal(text: Vec<Vec<char>>) -> u32 {
     count
 }
 
+/// Find how many times a X of "MAS" appears in the text.
+fn analylze_array_2(text_array: Vec<Vec<char>>) -> u32 {
+    let mut count = 0;
+    let rows = text_array.len();
+    let cols = text_array[0].len();
+
+    for i in 1..rows - 1 {
+        for j in 1..cols - 1 {
+            if text_array[i][j] == 'A' {
+                match text_array[i - 1][j - 1] {
+                    'M' => {
+                        if text_array[i + 1][j + 1] == 'S' {
+                            match text_array[i - 1][j + 1] {
+                                'S' => {
+                                    if text_array[i + 1][j - 1] == 'M' {
+                                        count += 1;
+                                    }
+                                }
+                                'M' => {
+                                    if text_array[i + 1][j - 1] == 'S' {
+                                        count += 1;
+                                    }
+                                }
+                                _ => continue,
+                            }
+                        }
+                    }
+                    'S' => {
+                        if text_array[i + 1][j + 1] == 'M' {
+                            match text_array[i - 1][j + 1] {
+                                'M' => {
+                                    if text_array[i + 1][j - 1] == 'S' {
+                                        count += 1;
+                                    }
+                                }
+                                'S' => {
+                                    if text_array[i + 1][j - 1] == 'M' {
+                                        count += 1;
+                                    }
+                                }
+                                _ => continue,
+                            }
+                        }
+                    }
+                    _ => continue,
+                }
+            }
+        }
+    }
+
+    count
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -156,7 +211,8 @@ mod tests {
 
     #[test]
     fn test_day4_2() {
-        // TODO
-        assert_eq!(1, 0);
+        let text_array = read_file_to_array("tests/day04.txt");
+        let count = analylze_array_2(text_array);
+        assert_eq!(count, 9);
     }
 }
