@@ -1,0 +1,120 @@
+use core::str;
+use std::collections::{HashMap, HashSet};
+
+pub fn day5_1() -> u32 {
+    println!("TODO");
+    // "inputs/day05.txt"
+    // IDEA:
+    // Read updates from last element to first to check validity of each of them
+    // Do the things to conclude
+    0
+}
+
+pub fn day5_2() -> u32 {
+    println!("TODO");
+    0
+}
+
+type Rules = HashMap<u32, HashSet<u32>>;
+type Updates = Vec<Vec<u32>>;
+
+fn read_file(src: &str) -> (Rules, Updates) {
+    let mut rules: Rules = HashMap::new();
+    let mut updates = Vec::new();
+
+    let file = std::fs::File::open(src).expect("File not found.");
+    let reader = std::io::BufReader::new(file);
+
+    let mut is_beginning = true;
+    for line in std::io::BufRead::lines(reader) {
+        let line = line.unwrap();
+        if line.is_empty() {
+            is_beginning = false;
+            continue;
+        }
+        if is_beginning {
+            // Parse rules
+            let mut nums = line.split('|');
+
+            let before: u32 = nums.next().unwrap().parse().unwrap();
+            let after: u32 = nums.next().unwrap().parse().unwrap();
+
+            if rules.contains_key(&after) {
+                rules.get_mut(&after).unwrap().insert(before);
+            } else {
+                rules.insert(after, HashSet::from([before]));
+            }
+        } else {
+            // Parse updates
+            let nums = line.split(',');
+            let mut update = Vec::new();
+
+            for num in nums {
+                let value: u32 = num.parse().unwrap();
+                update.push(value);
+            }
+
+            updates.push(update);
+        }
+    }
+
+    (rules, updates)
+}
+
+fn identify_valid_updates(rules: Rules, updates: Updates) -> Vec<usize> {
+    let mut valid_updates = Vec::new();
+
+    for (idx, update) in updates.iter().enumerate() {
+        let mut is_valid = true;
+
+        'rev_updates: for (i, v) in update.iter().rev().enumerate() {
+            let before = rules.get(v);
+            match before {
+                Some(b) => {
+                    for e in b {
+                        let end_idx = update.len() - i - 1;
+                        if !update[..end_idx].contains(e) {
+                            is_valid = false;
+                            break 'rev_updates;
+                        }
+                    }
+                }
+                None => continue,
+            }
+        }
+        if is_valid {
+            valid_updates.push(idx);
+        }
+    }
+    valid_updates
+}
+
+fn middle_calculation(updates: Updates, valid_idx: Vec<usize>) -> u32 {
+    let mut sum = 0;
+    for i in valid_idx {
+        let middle_idx = updates[i].len() / 2;
+        sum += updates[i][middle_idx];
+    }
+
+    sum as u32
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_day5_1() {
+        let (rules, updates) = read_file("tests/day05.txt"); // OK
+        let valid_idx = identify_valid_updates(rules, updates.clone()); // NOT OK
+        println!("DEBUG: valid_idx={:?}", valid_idx);
+        let sum = middle_calculation(updates, valid_idx);
+        assert_eq!(sum, 143);
+    }
+
+    #[test]
+    fn test_day5_2() {
+        // "tests/day05.txt"
+        assert_eq!(1, 0);
+    }
+}
