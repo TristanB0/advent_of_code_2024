@@ -2,12 +2,9 @@ use core::str;
 use std::collections::{HashMap, HashSet};
 
 pub fn day5_1() -> u32 {
-    println!("TODO");
-    // "inputs/day05.txt"
-    // IDEA:
-    // Read updates from last element to first to check validity of each of them
-    // Do the things to conclude
-    0
+    let (rules, updates) = read_file("inputs/day05.txt");
+    let valid_idx = identify_valid_updates(rules, updates.clone());
+    middle_calculation(updates, valid_idx)
 }
 
 pub fn day5_2() -> u32 {
@@ -67,25 +64,22 @@ fn identify_valid_updates(rules: Rules, updates: Updates) -> Vec<usize> {
     for (idx, update) in updates.iter().enumerate() {
         let mut is_valid = true;
 
-        'rev_updates: for (i, v) in update.iter().rev().enumerate() {
-            let before = rules.get(v);
-            match before {
-                Some(b) => {
-                    for e in b {
-                        let end_idx = update.len() - i - 1;
-                        if !update[..end_idx].contains(e) {
-                            is_valid = false;
-                            break 'rev_updates;
-                        }
+        'loop_update: for (i, &v) in update.iter().enumerate() {
+            if let Some(dependencies) = rules.get(&v) {
+                for &dependency in dependencies {
+                    if update.contains(&dependency) && !update[..i].contains(&dependency) {
+                        is_valid = false;
+                        break 'loop_update;
                     }
                 }
-                None => continue,
             }
         }
+
         if is_valid {
             valid_updates.push(idx);
         }
     }
+
     valid_updates
 }
 
@@ -105,9 +99,8 @@ mod tests {
 
     #[test]
     fn test_day5_1() {
-        let (rules, updates) = read_file("tests/day05.txt"); // OK
-        let valid_idx = identify_valid_updates(rules, updates.clone()); // NOT OK
-        println!("DEBUG: valid_idx={:?}", valid_idx);
+        let (rules, updates) = read_file("tests/day05.txt");
+        let valid_idx = identify_valid_updates(rules, updates.clone());
         let sum = middle_calculation(updates, valid_idx);
         assert_eq!(sum, 143);
     }
