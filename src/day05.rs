@@ -4,12 +4,13 @@ use std::collections::{HashMap, HashSet};
 pub fn day5_1() -> u32 {
     let (rules, updates) = read_file("inputs/day05.txt");
     let valid_idx = identify_valid_updates(rules, updates.clone());
+
     middle_calculation(updates, valid_idx)
 }
 
 pub fn day5_2() -> u32 {
-    println!("TODO");
-    0
+    todo!();
+    // IDEA: For all errors, swap the pages concerned
 }
 
 type Rules = HashMap<u32, HashSet<u32>>;
@@ -67,7 +68,7 @@ fn identify_valid_updates(rules: Rules, updates: Updates) -> Vec<usize> {
         'loop_update: for (i, &v) in update.iter().enumerate() {
             if let Some(dependencies) = rules.get(&v) {
                 for &dependency in dependencies {
-                    if update.contains(&dependency) && !update[..i].contains(&dependency) {
+                    if update[i..].contains(&dependency) && !update[..i].contains(&dependency) {
                         is_valid = false;
                         break 'loop_update;
                     }
@@ -90,7 +91,7 @@ fn middle_calculation(updates: Updates, valid_idx: Vec<usize>) -> u32 {
         sum += updates[i][middle_idx];
     }
 
-    sum as u32
+    sum
 }
 
 #[cfg(test)]
@@ -107,7 +108,6 @@ mod tests {
 
     #[test]
     fn test_day5_2() {
-        // "tests/day05.txt"
         assert_eq!(1, 0);
     }
 }
