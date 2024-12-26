@@ -5,6 +5,7 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 use crate::day01::{day1_1, day1_2};
 use crate::day02::{day2_1, day2_2};
@@ -13,6 +14,7 @@ use crate::day04::{day4_1, day4_2};
 use crate::day05::{day5_1, day5_2};
 use crate::day06::{day6_1, day6_2};
 use crate::day07::{day7_1, day7_2};
+use crate::day08::{day8_1, day8_2};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -48,6 +50,10 @@ fn main() {
         7 => {
             println!("Day 7-1: {}", day7_1());
             println!("Day 7-2: {}", day7_2());
+        }
+        8 => {
+            println!("Day 8-1: {}", day8_1());
+            println!("Day 8-2: {}", day8_2());
         }
         _ => {
             println!("Invalid day.");
