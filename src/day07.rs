@@ -78,7 +78,7 @@ fn test_configurations(equations: Vec<Equation>) -> u64 {
 }
 
 fn generate_perm(n: u64, size: usize) -> String {
-    let n_txt = format!("{:0size$b}", n, size = size as usize);
+    let n_txt = format!("{:0size$b}", n, size = size);
     n_txt.to_string()
 }
 
