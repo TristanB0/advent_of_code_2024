@@ -3,9 +3,7 @@ use std::fs;
 pub fn day9_1() -> u64 {
     let data = read_file("inputs/day09.txt");
     let disk = represent_data(data);
-    println!("DEBUG: {}", disk.iter().cloned().collect::<String>());
     let new_disk = move_blocks(disk);
-    println!("DEBUG: {}", new_disk.iter().cloned().collect::<String>());
     let sum = checksum(new_disk);
 
     sum
