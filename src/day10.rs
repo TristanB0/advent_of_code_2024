@@ -9,7 +9,10 @@ pub fn day10_1() -> u32 {
 }
 
 pub fn day10_2() -> u32 {
-    todo!();
+    let file = read_file("inputs/day10.txt");
+    let count = trailheads_rating(file);
+
+    count
 }
 
 fn read_file(src: &str) -> Vec<Vec<char>> {
@@ -34,8 +37,25 @@ fn count_trailheads(grid: Vec<Vec<char>>) -> u32 {
         for j in 0..grid[i].len() {
             if grid[i][j] == '0' {
                 let mut discovered: HashSet<(usize, usize)> = HashSet::new();
-                count += look_around_case(&grid, i, j, '1', &mut discovered); // Look for '1'
+                count += look_around_case(&grid, i, j, '1', &mut discovered, true); // Look for '1'
                 discovered.clear();
+            }
+        }
+    }
+
+    count
+}
+
+fn trailheads_rating(grid: Vec<Vec<char>>) -> u32 {
+    let mut count = 0;
+
+    for i in 0..grid.len() {
+        for j in 0..grid[i].len() {
+            if grid[i][j] == '0' {
+                // Just to reuse existing function
+                let mut discovered: HashSet<(usize, usize)> = HashSet::new();
+                // Look for '1'
+                count += look_around_case(&grid, i, j, '1', &mut discovered, false);
             }
         }
     }
@@ -49,16 +69,19 @@ fn look_around_case(
     y: usize,
     value: char,
     discovered: &mut HashSet<(usize, usize)>,
+    is_score: bool,
 ) -> u32 {
     let mut count = 0;
     let value_u32 = value.to_digit(16).unwrap(); // Base 16 to reach 10
 
     if value_u32 == 10 {
-        if discovered.contains(&(x, y)) {
-            return 0;
-        }
+        if is_score {
+            if discovered.contains(&(x, y)) {
+                return 0;
+            }
 
-        discovered.insert((x, y));
+            discovered.insert((x, y));
+        }
 
         return 1;
     }
@@ -91,6 +114,7 @@ fn look_around_case(
                     (y + j) as usize,
                     new_value,
                     discovered,
+                    is_score,
                 );
             }
         }
@@ -112,6 +136,8 @@ mod tests {
 
     #[test]
     fn test_day10_2() {
-        assert_eq!(1, 0);
+        let file = read_file("tests/day10.txt");
+        let count = trailheads_rating(file);
+        assert_eq!(count, 81);
     }
 }
