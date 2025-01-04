@@ -7,8 +7,11 @@ pub fn day11_1() -> usize {
     res
 }
 
-pub fn day11_2() -> u32 {
-    todo!();
+pub fn day11_2() -> usize {
+    let stones = read_file("inputs/day11.txt");
+    let res = blink(stones, 75);
+
+    res
 }
 
 struct Stone {
@@ -84,10 +87,5 @@ mod tests {
         let stones = read_file("tests/day11.txt");
         let res = blink(stones, 25);
         assert_eq!(res, 55312);
-    }
-
-    #[test]
-    fn test_day11_2() {
-        assert_eq!(1, 0);
     }
 }
